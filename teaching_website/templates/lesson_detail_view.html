@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="text-center">
+    <h2 class="mb-0 mt-5 font-weight-bold" style="color:#ff5722;">Lecture Details</h2>
+    <div class="row d-flex justify-content-center mb-3">
+      <blockquote class="blockquote mt-4">
+        <footer class="blockquote-footer">Created on {{lessons.created_at}} by <cite title="Source Title">{{lessons.created_by}}</cite></footer>
+        </blockquote>
+    </div>
+    <!-- video -->
+    <div class="row d-flex justify-content-center mb-3">
+      <div id="player-overlay">
+            <video controls>
+                <source src="{{lessons.video.url}}"  type="video/mp4">
+              </video>
+      </div>
+    </div>
+    <!-- download cards -->
+    <div class="row d-flex justify-content-center mb-3 mt-3">
+      <!-- download presentations -->
+                <div class="col-md-4 mb-4 mt-4">
+                  <div class="card box-shadow-hover">
+                    <div class="card-body">
+                      <h5 class="card-title">Download Presentations</h5>
+                      {% if lessons.ppt %}
+                      <p class="card-text">Download presentations from the lecture</p>
+                      <a href="{{lessons.ppt.url}}" download>
+                      <button type="button" class="btn btn-primary"><span>Get Files</span></button>
+                      </a>
+                      {% else %}
+                      <p class="card-text" > No PPT available</p>
+                      {% endif %}
+
+                    </div>
+                  </div>
+                </div>
+      <!-- download notes -->
+                <div class="col-md-4 mb-4 mt-4">
+                  <div class="card box-shadow-hover">
+                    <div class="card-body">
+                      <h5 class="card-title">Download Notes</h5>
+                      {% if lessons.Notes %}
+                      <p class="card-text">Download notes from the lecture</p>
+                      <a href="{{lessons.Notes.url}}" download>
+                      <button type="button" class="btn btn-primary"><span>Get Files</span></button>
+                      </a>
+                      {% else %}
+                      <p class="card-text">Notes not available</p>
+                      {%endif%}
+
+                    </div>
+                  </div>
+                </div>
+      <!-- download video -->
+                <div class="col-md-4 mb-4 mt-4">
+                  <div class="card box-shadow-hover">
+                    <div class="card-body">
+                      <h5 class="card-title">Download Video</h5>
+                      <p class="card-text">Download Video from the lecture</p>
+                      <a href="{{lessons.video.url}}" download>
+                      <button type="button" class="btn btn-primary"><span>Get Files</span></button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+    </div>
+    <!-- update and delete button -->
+    <div class="row d-flex justify-content-center mb-3 mt-3">
+        {% if user.userprofileinfo.user_type == 'teacher' or user.is_superuser %}
+        <div class="col-md-6 mb-3 text-center">
+            <a href="{% url 'curriculum:lesson_update' standard=lessons.Standard.slug subject=lessons.subject.slug slug=lessons.slug %}" class="btn btn-warning btn-lg mr-4 btn-block">Update Lesson</a>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'curriculum:lesson_delete' standard=lessons.Standard.slug subject=lessons.subject.slug slug=lessons.slug %}" class="btn btn-danger btn-lg mr-4 btn-block"> Delete Lesson </a>
+        </div>
+        {% endif %}
+      </div>
+</section>
+
+<hr class="my-5" style="color:#ff5722;">
+
+{% comment %} <a href="{% url 'curriculum:lesson_update' standard=lessons.Standard.slug subject=lessons.subject.slug slug=lessons.slug %}">Update lesson</a>
+
+
+<a href="{% url 'curriculum:lesson_delete' standard=lessons.Standard.slug subject=lessons.subject.slug slug=lessons.slug %}">Delete lesson</a> {% endcomment %}
+
+
+{% comment %} <h4> post comment </h4>
+<form method="post">
+    <div class='form-group'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" name="form" value="add comment">
+    </div>
+</form>
+
+{% for comment in lesson.comments.all %}
+    <h4>{{comment.author}}</h4> <p>posted on : {{comment.date_added}}</p>
+    <p>{{comment.body}}</p>
+    {% for reply in  comment.replies.all%}
+    <h4>{{reply.author}}</h4> <p>posted on : {{reply.date_added}}</p>
+    <p>{{reply.reply_body}}</p>
+    {% endfor %}
+
+    <form method="post">
+        <input type="hidden" name="comment.id" value="{{comment.id}}"/>
+        {% csrf_token %}
+        {{form2.as_p}}
+        <input type="submit" name="form2" value="add reply">
+    </form>
+
+
+{% endfor %}
+ {% endcomment %}
+
+
+
+{% endblock content %}
+
+
+
+

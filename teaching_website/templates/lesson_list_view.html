@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="my-5">Chapters of this Subject</h2>
+{% for lesson in subjects.lessons.all  %}
+    <div class="card" style="width: 40rem; background-color: rgb(212, 212, 212);">
+        <div class="card-body">
+            <h5 class="card-title">{{lesson.name}}</h5>
+            
+            <a class="btn btn-primary" style="width: 200px;" href="{% url 'curriculum:lesson_detail' slug=lesson.slug subject=subjects.slug standard=lesson.Standard.slug %}">See lectutres</a>
+            
+        </div>
+        </div>
+        <br>
+
+            {% comment %} <a href="">{{lesson.position}} : {{lesson.name}}</a> {% endcomment %}
+            {% comment %} {{subject.description|truncatechars:75}} {% endcomment %}
+
+
+
+{% endfor %}
+
+{% if user.is_superuser %}
+
+<a class="btn btn-success my-4" style="width: 300px;"  href="{% url 'curriculum:lesson_create' standard=subjects.standard.slug slug=subjects.slug %}">Add lesson</a>
+
+{% endif %}
+
+{% endblock content %}
+
+
+
+
